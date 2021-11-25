@@ -12,6 +12,7 @@ module.exports = class DataManager {
                fs.writeFileSync(path.join(__dirname, "../data/productos.json"), JSON.stringify([]))
                console.log(err)
             }
+            console.log(data)
             this.data = JSON.parse(data)
          })
       } catch (err) {

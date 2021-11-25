@@ -21,7 +21,9 @@ module.exports = {
 
       if (!file) {
          res.status(STATUS_CODE.BAD_REQUEST).json({ message: "No se ha subido ninguna imagen" })
-
+      }
+      if (!product_name || !product_price) {
+         res.status(STATUS_CODE.BAD_REQUEST).json({ message: "Los datos propuestos son incorrectos o no se enviaron" })
       }
       const product = {
          title: product_name,
@@ -35,6 +37,10 @@ module.exports = {
 
    updateProduct: (req, res) => {
       const { product_name, product_price } = req.body
+      console.log(req.files)
+      if (!product_name || !product_price || req.files.length == 0) {
+         res.status(STATUS_CODE.BAD_REQUEST).json({ message: "Los datos propuestos son incorrectos o no se enviaron" })
+      }
 
       const id = req.params.id
       const file = req.files
