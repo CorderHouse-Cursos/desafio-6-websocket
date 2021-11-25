@@ -43,8 +43,13 @@ module.exports = class DataManager {
    updateData(id, data) {
       const product = this.data.find(item => item.id === parseInt(id))
       if (!product) return false
-      console.log(path.join(__dirname, "../public/uploads/" + product.thumbnail))
-      const newData = this.data.map(item => item.id == parseInt(id) ? { ...item, ...data } : item)
+      const newData = this.data.map(item => {
+         if (item.id === parseInt(id)) {
+            item = { ...item, ...data }
+         }
+         return item
+      })
+      this.data = newData
       this.__saveData(newData)
       return true
    }
