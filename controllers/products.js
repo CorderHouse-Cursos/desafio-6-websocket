@@ -7,13 +7,16 @@ const productManager = new DataManager()
 module.exports = {
    getProducts: (req, res) => {
       const products = productManager.getData()
-      res.status(STATUS_CODE.OK).json(products)
+      console.log(products)
+      res.render("pages/products", { products })
    },
    getProduct: (req, res) => {
       const id = req.params.id
       const product = productManager.getData(id)
       if (!product) res.status(STATUS_CODE.NOT_FOUND).json({ message: "Producto no encontrado" })
-      res.status(STATUS_CODE.OK).json(product)
+      res.render("index.ejs", { product })
+
+
    },
    createProduct: (req, res) => {
       const { product_name, product_price } = req.body
@@ -32,20 +35,21 @@ module.exports = {
       }
 
       const newProduct = productManager.createData(product)
-      res.status(STATUS_CODE.CREATED).json(newProduct)
+
+      res.render("pages/index", {})
    },
 
    updateProduct: (req, res) => {
       const { product_name, product_price } = req.body
-      console.log(req.files)
+
       if (!product_name || !product_price || req.files.length == 0) {
          res.status(STATUS_CODE.BAD_REQUEST).json({ message: "Los datos propuestos son incorrectos o no se enviaron" })
       }
 
       const id = req.params.id
       const file = req.files
-      const product = productManager.getData(id)
-      const newProduct = { ...product, title: product_name, price: product_price, thumbnail: `${constants.URL}/uploads/${file[0].filename}` }
+
+      const newProduct = { title: product_name, price: product_price, thumbnail: `${constants.URL}/uploads/${file[0].filename}` }
       const isEdited = productManager.updateData(id, newProduct)
       if (!isEdited) {
          res.status(STATUS_CODE.NOT_FOUND).json({ message: "Producto no encontrado" })

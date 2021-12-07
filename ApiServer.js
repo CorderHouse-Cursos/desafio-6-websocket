@@ -26,19 +26,26 @@ class ApiServer {
 
    }
    __settingsRoutes() {
-      this.app.use('/api/productos', routes)
+      this.app.use('/productos', routes)
+      this.app.get("/", (req, res) => {
+         res.render("pages/index")
+      })
    }
    settings() {
       this.app.use(express.json())
       this.app.use(express.urlencoded({ extended: true }))
       this.__settingsMulter()
       this.app.use('/', express.static(`${__dirname}/public`))
+      this.app.set("view engine", "ejs")
+
       this.app.use(morgan('dev'))
       this.__settingsRoutes()
 
       this.app.on("error", () => {
          console.log("error")
       })
+
+
    }
    startServer() {
       this.app.listen(this.port, () => {
