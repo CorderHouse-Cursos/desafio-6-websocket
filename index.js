@@ -58,12 +58,12 @@ io.on("connection", async (socket) => {
       const messages = await messagesManager.getData()
       io.emit("messages", messages)
    })
-   socket.on("new-product", () => {
+   socket.on("new-product", async () => {
       const products = await productManager.getData()
       io.emit("products", products)
    })
    const products = await productManager.getData()
-
+   const messages = await messagesManager.getData()
    // console.log(messages)
    io.emit("products", products)
    io.emit("messages", messages)
