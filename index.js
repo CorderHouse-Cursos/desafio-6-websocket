@@ -55,9 +55,15 @@ io.on("connection", async (socket) => {
          date: formattedDate
       }
       await messagesManager.createData(message)
+      const messages = await messagesManager.getData()
+      io.emit("messages", messages)
+   })
+   socket.on("new-product", () => {
+      const products = await productManager.getData()
+      io.emit("products", products)
    })
    const products = await productManager.getData()
-   const messages = await messagesManager.getData()
+
    // console.log(messages)
    io.emit("products", products)
    io.emit("messages", messages)
