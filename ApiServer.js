@@ -36,7 +36,7 @@ class ApiServer {
       this.app.use(express.urlencoded({ extended: true }))
       this.__settingsMulter()
       this.app.use('/', express.static(`${__dirname}/public`))
-      this.app.set("view engine", "ejs")
+      this.app.set("view engine", "hbs")
 
       this.app.use(morgan('dev'))
       this.__settingsRoutes()

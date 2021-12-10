@@ -3,19 +3,19 @@ const DataManager = require("../helpers/DataManager")
 const STATUS_CODE = require("../helpers/statusCode")
 const constants = require("../helpers/constants")
 
-const productManager = new DataManager()
+
+const productManager = new DataManager("productos")
 module.exports = {
    getProducts: (req, res) => {
       const products = productManager.getData()
-      console.log(products)
-      res.render("pages/products", { products })
+
+      res.json({ products })
    },
    getProduct: (req, res) => {
       const id = req.params.id
       const product = productManager.getData(id)
       if (!product) res.status(STATUS_CODE.NOT_FOUND).json({ message: "Producto no encontrado" })
-      res.render("index.ejs", { product })
-
+      res.json({ product })
 
    },
    createProduct: (req, res) => {
@@ -36,7 +36,7 @@ module.exports = {
 
       const newProduct = productManager.createData(product)
 
-      res.render("pages/index", {})
+      res.json({ message: "Producto creado", product: newProduct })
    },
 
    updateProduct: (req, res) => {

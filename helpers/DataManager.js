@@ -1,15 +1,20 @@
+
 const fs = require("fs")
 const path = require("path")
 
 module.exports = class DataManager {
-   constructor() {
+
+   constructor(name) {
+      this.name = name ? name : "productos"
       this.__loadData()
+
+
    }
    __loadData() {
       try {
-         fs.readFile(path.join(__dirname, "../data/productos.json"), (err, data) => {
+         fs.readFile(path.join(__dirname, `../data/${this.name}.json`), (err, data) => {
             if (err) {
-               fs.writeFileSync(path.join(__dirname, "../data/productos.json"), JSON.stringify([]))
+               fs.writeFileSync(path.join(__dirname, `../data/${this.name}.json`), JSON.stringify([]))
                console.log(err)
             }
             console.log(data)
@@ -20,9 +25,10 @@ module.exports = class DataManager {
       }
    }
    __saveData(data) {
-      fs.writeFileSync(path.join(__dirname, "../data/productos.json"), JSON.stringify(data))
+      fs.writeFileSync(path.join(__dirname, `../data/${this.name}.json`), JSON.stringify(data))
    }
    getData(id) {
+      console.log("a")
       return id ? this.data.find(item => item.id === parseInt(id)) : this.data
    }
    createData(data) {
@@ -33,16 +39,16 @@ module.exports = class DataManager {
       return newData
    }
    deleteData(id) {
-      const product = this.data.find(item => item.id === parseInt(id))
-      if (!product) return false
+      const isValid = this.data.find(item => item.id === parseInt(id))
+      if (!isValid) return false
       const newData = this.data.filter(item => item.id !== parseInt(id))
       this.__saveData(newData)
       this.data = newData
       return true
    }
    updateData(id, data) {
-      const product = this.data.find(item => item.id === parseInt(id))
-      if (!product) return false
+      const isValid = this.data.find(item => item.id === parseInt(id))
+      if (!isValid) return false
       const newData = this.data.map(item => {
          if (item.id === parseInt(id)) {
             item = { ...item, ...data }
