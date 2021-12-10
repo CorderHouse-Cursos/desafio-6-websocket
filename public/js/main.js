@@ -2,7 +2,7 @@
 
 
 
-const socket = io.connect("http://localhost:3000/")
+const socket = io.connect(window.location.origin)
 
 socket.on("products", data => {
    const html = data.map(product => {
@@ -42,8 +42,7 @@ async function addProduct(e) {
    formData.append("product_price", document.getElementById("product_price").value)
 
 
-
-   const res = await fetch("http://localhost:3000/productos", {
+   const res = await fetch(window.location.origin + "/productos", {
       method: "POST",
       body: formData
 
