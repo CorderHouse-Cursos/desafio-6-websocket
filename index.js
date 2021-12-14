@@ -43,8 +43,15 @@ server.listen(process.env.PORT || 3000, () => {
 })
 
 
-io.on("connection", async (socket) => {
+io.on("connection", (socket) => {
+   console.log("New user connected" + socket.client);
 
+   const products = productManager.getData()
+
+   const messages = messagesManager.getData()
+
+   io.emit("products", products)
+   io.emit("messages", messages)
    socket.on("new-message", async (data) => {
       console.log(data)
       const fecha = new Date();
@@ -58,15 +65,14 @@ io.on("connection", async (socket) => {
       const messages = await messagesManager.getData()
       io.emit("messages", messages)
    })
-   socket.on("new-product", async () => {
-      const products = await productManager.getData()
-      io.emit("products", products)
+   socket.on("new-product", async (data) => {
+      console.log(data)
+      const a = await productManager.getData()
+      console.log(a)
+      io.emit("products", [...a, data])
    })
-   const products = await productManager.getData()
-   const messages = await messagesManager.getData()
-   // console.log(messages)
-   io.emit("products", products)
-   io.emit("messages", messages)
+
+
 
 
    socket.on("disconnect", () => {

@@ -14,21 +14,23 @@ module.exports = class DataManager {
       try {
          fs.readFile(path.join(__dirname, `../data/${this.name}.json`), (err, data) => {
             if (err) {
-               fs.writeFileSync(path.join(__dirname, `../data/${this.name}.json`), JSON.stringify([]))
+               fs.writeFileSync(path.join(__dirname, `../data/${this.name}.json`), JSON.stringify({ data: [] }))
                console.log(err)
             }
-            console.log(data)
-            this.data = JSON.parse(data)
+
+            console.log("_loadData  " + this.name, JSON.parse(data).data.length)
+            this.data = JSON.parse(data).data
          })
       } catch (err) {
          console.log(err)
       }
    }
    __saveData(data) {
-      fs.writeFileSync(path.join(__dirname, `../data/${this.name}.json`), JSON.stringify(data))
+      fs.writeFileSync(path.join(__dirname, `../data/${this.name}.json`), JSON.stringify({ data }))
    }
    getData(id) {
-      console.log("a")
+      this.__loadData()
+
       return id ? this.data.find(item => item.id === parseInt(id)) : this.data
    }
    createData(data) {

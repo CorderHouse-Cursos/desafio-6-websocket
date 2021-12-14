@@ -4,7 +4,9 @@
 
 const socket = io.connect(window.location.origin)
 
+
 socket.on("products", data => {
+   console.log(data)
    const html = data.map(product => {
       return (` <tr>
          <th scope="row">${product.id}</th>
@@ -36,20 +38,31 @@ async function addProduct(e) {
    e.preventDefault()
 
    const formData = new FormData()
-
+   if (document.getElementById("product_name") === "" || document.getElementById("product_price") === "" || document.getElementById("product_thumbnail") === "") {
+      alert("Debe llenar todos los campos")
+      return
+   }
+   if (document.getElementById("product_image").files[0] === undefined) {
+      alert("Debe seleccionar una imagen")
+      return
+   }
    formData.append("product_image", document.getElementById("product_image").files[0])
    formData.append("product_name", document.getElementById("product_name").value)
    formData.append("product_price", document.getElementById("product_price").value)
 
 
-   const res = await fetch(window.location.origin + "/productos", {
-      method: "POST",
-      body: formData
+   try {
+      const res = await fetch(window.location.origin + "/productos", {
+         method: "POST",
+         body: formData
 
-   })
-   const data = await res.json()
+      })
+      const data = await res.json()
+      socket.emit("new-product", data.product)
+   } catch (err) {
+      alert("Error al crear")
+   }
 
-   socket.emit("new-product", data)
 
    document.getElementById("formproducts").reset()
 
