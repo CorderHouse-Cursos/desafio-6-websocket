@@ -1,3 +1,3 @@
 module.exports = {
-   URL: "https://thunder-chain-math.glitch.me"
+   URL: "https://websocket-server-coder.herokuapp.com/"
 }
